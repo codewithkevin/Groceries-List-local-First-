@@ -16,7 +16,6 @@ export default function SignIn() {
   const [password, setPassword] = React.useState("");
   const [isSigningIn, setIsSigningIn] = React.useState(false);
 
-  // Handle the submission of the sign-in form
   const onSignInPress = React.useCallback(async () => {
     if (!isLoaded) return;
 
@@ -25,26 +24,19 @@ export default function SignIn() {
     }
     setIsSigningIn(true);
 
-    // Start the sign-in process using the email and password provided
     try {
       const signInAttempt = await signIn.create({
         identifier: emailAddress,
         password,
       });
 
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
         router.replace("/(index)");
       } else {
-        // If the status isn't complete, check why. User might need to
-        // complete further steps.
-        console.error(JSON.stringify(signInAttempt, null, 2));
+        console.error("SignInAttempt", JSON.stringify(signInAttempt, null, 2));
       }
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     } finally {
       setIsSigningIn(false);
@@ -85,12 +77,14 @@ export default function SignIn() {
       >
         Sign in
       </Button>
+
       <View style={{ marginTop: 16, alignItems: "center" }}>
         <ThemedText>Don't have an account?</ThemedText>
         <Button onPress={() => onNavigatePress("/sign-up")} variant="ghost">
           Sign up
         </Button>
       </View>
+
       <View style={{ marginTop: 16, alignItems: "center" }}>
         <ThemedText>Forgot password?</ThemedText>
         <Button
