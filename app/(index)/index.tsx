@@ -1,8 +1,10 @@
 import { BodyScrollView } from "@/components/ui/BodyScrollView";
 import Button from "@/components/ui/button";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { appleBlue } from "@/constants/Colors";
 import { useClerk } from "@clerk/clerk-expo";
-import { router } from "expo-router";
-import { Alert } from "react-native";
+import { router, Stack } from "expo-router";
+import { Alert, Pressable } from "react-native";
 
 export default function HomeScreen() {
   const { signOut } = useClerk();
@@ -17,9 +19,33 @@ export default function HomeScreen() {
     }
   };
 
+  const renderHeaderRight = () => {
+    return (
+      <Pressable onPress={() => router.push("/list/new")}>
+        <IconSymbol name="plus" size={24} color={appleBlue} />
+      </Pressable>
+    );
+  };
+
+  const renderHeaderLeft = () => {
+    return (
+      <Pressable onPress={() => router.push("/profile")}>
+        <IconSymbol name="gear" size={24} color={appleBlue} />
+      </Pressable>
+    );
+  };
+
   return (
-    <BodyScrollView contentContainerStyle={{ padding: 16 }}>
-      <Button onPress={handleSignOut}>Sign Out</Button>
-    </BodyScrollView>
+    <>
+      <Stack.Screen
+        options={{
+          headerRight: renderHeaderRight,
+          headerLeft: renderHeaderLeft,
+        }}
+      />
+      <BodyScrollView contentContainerStyle={{ padding: 16 }}>
+        <Button onPress={handleSignOut}>Sign Out</Button>
+      </BodyScrollView>
+    </>
   );
 }
